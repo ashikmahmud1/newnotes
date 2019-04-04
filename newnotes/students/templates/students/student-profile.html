@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <!-- Display below navbar if logged in user is a student -->
+    <nav id="navbarColor" class="navbar navbar-inverse">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse-2"><span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a style="float: right;" class="navbar-brand" href="{{ url_for('students.profile') }}">
+                    NewNotes
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-2">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{ user.name }} {{ user.surname }} <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('profile_edit') }}"><i class="glyphicon glyphicon-cog"></i> Edit
+                                Profile</a></li>
+                            <li><a href="{{ url_for('logout') }}"><i class="glyphicon glyphicon-log-out"></i>Log out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a data-toggle="tooltip" title="Log out" href="{{ url_for('logout') }}"><i
+                            class="glyphicon glyphicon-log-out"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End navbar -->
+
+    <!-- Show error message if student isnt approved to the class -->
+    {% if not user.approved %}
+        <div id="alertHomePage" class="alert alert-danger">
+            <strong>Attention!</strong> Please wait to be approved to this class.
+        </div>
+    {% endif %}
+    <!-- Container on left hand side - calender and details -->
+    <div id="homePageBackground" class="container text-center">
+        <div class="row">
+
+            <div class="col-sm-3">
+                <div class="well">
+                    <h5><span class="glyphicon glyphicon-user"></span> {{ user.name }} {{ user.surname }}</h5>
+                    <hr>
+                    <h5><span class="glyphicon glyphicon-tag"></span> {{ user.email }}</h5>
+                    <hr/>
+                    <h5><span class="glyphicon glyphicon-map-marker"></span> {{ user.school.name }}</h5>
+                </div>
+
+                <div class="well" style="padding: 0;width: 100%">
+                    <div style="padding-top: 8px">
+                        <h5><span class="glyphicon glyphicon-calendar"></span><b> Calender</b></h5>
+                    </div>
+
+                    <hr/>
+
+                    <div id="calenderAlignment" class="container">
+                        <div class="cal" style="border: 1px solid #f5f5f0;">
+                            <div class="cal__header">
+                                <button class="btn btn-action btn-link btn-lg" data-calendar-toggle="previous">
+                                    <svg height="24" version="1.1" viewbox="0 0 24 24" width="24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="cal__header__label" data-calendar-label="month"></div>
+
+                                <button class="btn btn-action btn-link btn-lg" data-calendar-toggle="next">
+                                    <svg height="24" version="1.1" viewbox="0 0 24 24" width="24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="cal__week">
+                                <span>Mo</span>
+                                <span>Tu</span>
+                                <span>We</span>
+                                <span>Th</span>
+                                <span>Fr</span>
+                                <span>Sa</span>
+                                <span>Su</span>
+                            </div>
+
+                            <div class="cal__body" data-calendar-area="month"></div>
+                        </div>
+
+                        <p class="demo-picked">
+                            Date picked: <span data-calendar-label="picked"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <h4>Home</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Show course material -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="text-align: left;" class="well">
+                            <h4>NewNotes: Material</h4>
+                            <hr/>
+                            {% if user.approved %}
+                                <h5>
+                                    <a href="{{ url_for('schools.module1') }}">
+                                        <span style="color: red;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 1
+                                    </a>
+                                </h5>
+
+                                <p>This is the first of the modules where the files for the module will be
+                                    located<br>Lots
+                                    of fun ahead. <br><br>Still to come: <br>More fun!!</p>
+
+                                <hr/>
+
+                                <h5>
+                                    <a href="{{ url_for('schools.module2') }}">
+                                        <span style="color: green;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 2
+                                    </a>
+                                </h5>
+
+                                <p>This is the second module that is availible for students, in here will be
+                                    documents
+                                    related to this module <br>Lots of fun ahead!</p>
+
+                                <hr/>
+
+                                <h5>
+                                    <a href="{{ url_for('schools.module3') }}">
+                                        <span style="color: blue;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 3
+                                    </a>
+                                </h5>
+
+                                <p>This is the third module that will be availibe for students, in here will be
+                                    documents related to this module<br> All the files necessary to complete this
+                                    module
+                                    will be in this foler<br><br>Lots of fun ahead!<br><br>Still to come: All the
+                                    documents</p>
+
+                                <hr/>
+                                <div id="ComingSoonWeb"></div>
+                                <h5>
+                                    <a href="#ComingSoonWeb">
+                                        <span style="color: purple;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 4
+                                    </a>
+                                </h5>
+
+                                <p>Coming soon</p>
+
+                                <hr/>
+
+                                <div id="ComingSoonApp"></div>
+                                <h5>
+                                    <a href="#ComingSoonApp">
+                                        <span style="color: yellow;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 5
+                                    </a>
+                                </h5>
+                                <p>Coming soon</p>
+                                <hr/>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="thumbnail well">
+                    <h5><b>Quizes &amp; Assignments</b></h5>
+                    <hr/>
+                    {% if user.approved %}
+                        <table id="content" class="table table-hover table-responsive">
+                            <tbody>
+                            {% for assignment in assignments %}
+                                <tr>
+                                    <a href="{{ url_for('assignments.upload_document',assignment_id=assignment.id) }}">
+                                        {#Show the description of the assignment#}
+                                        {{ assignment.title }}
+                                    </a>
+                                </tr>
+                                <hr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div id="pagination"></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="fileModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Files</h4>
+                </div>
+
+                <div class="modal-body"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="posts" class="btn btn-success" style="float: right;">Post a Mesage</a>
+                    <h4 class="modal-title">Discussion Forum</h4>
+                </div>
+
+                <div class="modal-body">
+                    <table class="table table-hover table-responsive">
+                        <tr style="pointer-events: none;">
+                            <th>User</th>
+                            <th>Comment</th>
+                        </tr>
+
+                        {% for user in userTable %}
+                            <tr>
+                                <td>{{ user["userID"] }}<br><h6>{{ user["uploadedTime"] }}</h6></td>
+                                <td>{{ user["description"] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function () {
+            vanillacalendar.init();
+        })
+    </script>
+
+    <style type="text/css">
+        .well {
+            background: white;
+        }
+
+        hr {
+            border-color: #c2c2a3;
+        }
+
+        body {
+            background-color: #dbd8d9;
+        }
+
+        p {
+            font-size: 10px;
+        }
+    </style>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- Display below navbar if logged in user is a teacher -->
+    <nav id="navbarColor" class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse-2">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a style="float: right;" class="navbar-brand" href="{{ url_for('teachers.profile') }}">
+                    NewNotes
+                </a>
+
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-2">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{{ url_for('forums.questions') }}">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </a>
+                    </li>
+
+                    <li><a data-toggle="tooltip" title="View all files"
+                           href="{{ url_for('files.file_list') }}"><span
+                            class="glyphicon glyphicon-file"></span></a></li>
+                    <li><a data-toggle="tooltip" title="View students"
+                           href="{{ url_for('students.student_list') }}"><span
+                            class="glyphicon glyphicon-list" data-toggle="tooltip"
+                            data-original-title="Users"></span></a></li>
+
+                    <li id="dropdown1" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle"
+                           href="#">{{ user.name }} {{ user.surname }} <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('profile_edit') }}"><i class="glyphicon glyphicon-cog"></i> Edit
+                                Profile</a></li>
+                            <li><a href="{{ url_for('files.upload') }}"><i class="glyphicon glyphicon-upload"></i>
+                                Upload Files</a>
+                            </li>
+                            <li><a href="{{ url_for('assignments.assignment_list') }}"><i
+                                    class="glyphicon glyphicon-list"></i> Assignments</a>
+                            </li>
+                            <li><a href="{{ url_for('files.file_list') }}"><i class="glyphicon glyphicon-file"></i>
+                                Files</a></li>
+                            <li><a href="{{ url_for('logout') }}"><i class="glyphicon glyphicon-log-out"></i> Log
+                                out</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a data-toggle="tooltip" title="Log out" href="{{ url_for('logout') }}"><i
+                            class="glyphicon glyphicon-log-out"></i></a></li>
+                </ul>
+
+                <div class="col-sm-3 col-md-3" style="float: right;">
+                    <form class="navbar-form" role="form" method='post' action="{{ url_for('files.search') }}">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" id="searchBar"
+                                   placeholder="Search Files">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i
+                                        class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End of teacher navbar -->
+
+    <div id="backgroundRegisterPage" style="height: 580px;">
+        <div class="container">
+            <div id="loginbox" style="margin-top:50px;"
+                 class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+
+                <div class="panel panel-info">
+                    <!--This part will show the error messages-->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <div id="registerPage" class="panel-heading">
+                        <div class="panel-title">
+                            <h2>Update Profile</h2>
+                        </div>
+                    </div>
+                    <div style="padding-top:30px" class="panel-body">
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12">
+                        </div>
+                        <form id="loginform" class="form-horizontal" role="form" method='post'
+                              action="{{ url_for('teachers.edit_profile') }}">
+                            {{ form.hidden_tag() }}
+                            <div style="margin-bottom:25px" class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-user"></i>
+                            </span>
+                                {{ form.name(class='form-control', placeholder='First Name') }}
+                            </div>
+                            <div style="margin-bottom:25px" class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-lock"></i>
+                            </span>
+                                {{ form.surname(class='form-control', placeholder='Last Name') }}
+                            </div>
+                            {% if user.user_type=='admin' %}
+                                {# Display the schools for updating school #}
+                                <div style="margin-bottom:25px" class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                    {{ form.school(class='form-control') }}
+                                </div>
+                            {% endif %}
+                            {{ form.submit(class='btn btn-primary btn-block') }}
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

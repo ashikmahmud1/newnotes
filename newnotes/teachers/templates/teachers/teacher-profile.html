@@ -1,0 +1,349 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <!-- Display below navbar if logged in user is a teacher -->
+    <nav id="navbarColor" class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse-2">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a style="float: right;" class="navbar-brand" href="{{ url_for('teachers.profile') }}">
+                    NewNotes
+                </a>
+
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-2">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{{ url_for('forums.questions') }}">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </a>
+                    </li>
+
+                    <li><a data-toggle="tooltip" title="View all files" href="{{ url_for('files.file_list') }}"><span
+                            class="glyphicon glyphicon-file"></span></a></li>
+                    <li><a data-toggle="tooltip" title="View students"
+                           href="{{ url_for('students.student_list') }}"><span
+                            class="glyphicon glyphicon-list" data-toggle="tooltip"
+                            data-original-title="Users"></span></a></li>
+
+                    <li id="dropdown1" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{ user.name }} {{ user.surname }} <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('profile_edit') }}"><i class="glyphicon glyphicon-cog"></i> Edit
+                                Profile</a></li>
+                            <li><a href="{{ url_for('files.upload') }}"><i class="glyphicon glyphicon-upload"></i>
+                                Upload Files</a></li>
+                            <li><a href="{{ url_for('assignments.assignment_list') }}"><i
+                                    class="glyphicon glyphicon-list"></i> Assignments</a></li>
+                            <li><a href="{{ url_for('files.file_list') }}"><i class="glyphicon glyphicon-file"></i>Files</a>
+                            </li>
+                            <li><a href="{{ url_for('logout') }}"><i class="glyphicon glyphicon-log-out"></i> Log
+                                out</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a data-toggle="tooltip" title="Log out" href="{{ url_for('logout') }}"><i
+                            class="glyphicon glyphicon-log-out"></i></a></li>
+                </ul>
+
+                <div class="col-sm-3 col-md-3" style="float: right;">
+                    <form class="navbar-form" role="form" method="post" action="{{ url_for('files.search') }}">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" id="searchBar"
+                                   placeholder="Search Files">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i
+                                        class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End navbar -->
+
+    <!-- Container on left hand side - calender and details -->
+    <div id="homePageBackground" class="container text-center">
+        <div class="row">
+
+            <div class="col-sm-3">
+                <div class="well">
+                    <h5><span class="glyphicon glyphicon-user"></span> {{ user.name }} {{ user.surname }}</h5>
+                    <hr>
+                    <h5><span class="glyphicon glyphicon-tag"></span> {{ user.email }}</h5>
+                    <hr/>
+                    <h5><span class="glyphicon glyphicon-map-marker"></span> {{ user.school.name }}</h5>
+                </div>
+
+                <div class="well" style="padding: 0px;">
+                    <div style="padding-top: 8px">
+                        <h5><span class="glyphicon glyphicon-calendar"></span><b> Calender</b></h5>
+                    </div>
+
+                    <hr/>
+
+                    <div id="calenderAlignment" class="container">
+                        <div class="cal" style="border: 1px solid #f5f5f0;">
+                            <div class="cal__header">
+                                <button class="btn btn-action btn-link btn-lg" data-calendar-toggle="previous">
+                                    <svg height="24" version="1.1" viewbox="0 0 24 24" width="24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="cal__header__label" data-calendar-label="month"></div>
+
+                                <button class="btn btn-action btn-link btn-lg" data-calendar-toggle="next">
+                                    <svg height="24" version="1.1" viewbox="0 0 24 24" width="24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="cal__week">
+                                <span>Mo</span>
+                                <span>Tu</span>
+                                <span>We</span>
+                                <span>Th</span>
+                                <span>Fr</span>
+                                <span>Sa</span>
+                                <span>Su</span>
+                            </div>
+
+                            <div class="cal__body" data-calendar-area="month"></div>
+                        </div>
+
+                        <p class="demo-picked">
+                            Date picked: <span data-calendar-label="picked"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <h4>Home</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Show course material -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="text-align: left;" class="well">
+                            <h4>NewNotes: Material</h4>
+                            <hr/>
+
+
+                            {% if not user.approved %}
+                                <h5>
+                                    <a href="{{ url_for('schools.module1') }}">
+                                        <span style="color: red;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 1
+                                    </a>
+                                </h5>
+
+                                <p>This is the first of the modules where the files for the module will be located<br>Lots
+                                    of fun ahead. <br><br>Still to come: <br>More fun!!</p>
+
+                                <hr/>
+
+                                <h5>
+                                    <a href="{{ url_for('schools.module2') }}">
+                                        <span style="color: green;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 2
+                                    </a>
+                                </h5>
+
+                                <p>This is the second module that is availible for students, in here will be documents
+                                    related to this module <br>Lots of fun ahead!</p>
+
+                                <hr/>
+
+                                <h5>
+                                    <a href="{{ url_for('schools.module3') }}">
+                                        <span style="color: blue;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 3
+                                    </a>
+                                </h5>
+
+                                <p>This is the third module that will be availibe for students, in here will be
+                                    documents related to this module<br> All the files necessary to complete this module
+                                    will be in this foler<br><br>Lots of fun ahead!<br><br>Still to come: All the
+                                    documents</p>
+
+                                <hr/>
+                                <div id="ComingSoonWeb"></div>
+                                <h5>
+                                    <a href="#ComingSoonWeb">
+                                        <span style="color: purple;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 4
+                                    </a>
+                                </h5>
+
+                                <p>Coming soon</p>
+
+                                <hr/>
+
+                                <div id="ComingSoonApp"></div>
+                                <h5>
+                                    <a href="#ComingSoonApp">
+                                        <span style="color: yellow;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 5
+                                    </a>
+                                </h5>
+                                <p>Coming soon</p>
+                                <hr/>
+
+                            {% elif user.approved %}
+                                <h5>
+                                    <a href="{{ url_for('schools.module1') }}">
+                                        <span style="color: red;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 1
+                                    </a>
+                                </h5>
+
+                                <p>This is the first of the modules where the files for the module will be located<br>Lots
+                                    of fun ahead. <br><br>Still to come: <br>More fun!!</p>
+
+                                <hr/>
+
+                                <h5>
+                                    <a href="{{ url_for('schools.module2') }}">
+                                        <span style="color: green;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 2
+                                    </a>
+                                </h5>
+
+                                <p>This is the second module that is availible for students, in here will be documents
+                                    related to this module <br>Lots of fun ahead!</p>
+
+                                <hr/>
+
+                                <h5>
+                                    <a href="{{ url_for('schools.module3') }}">
+                                        <span style="color: blue;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 3
+                                    </a>
+                                </h5>
+
+                                <p>This is the third module that will be availibe for students, in here will be
+                                    documents related to this module<br> All the files necessary to complete this module
+                                    will be in this foler<br><br>Lots of fun ahead!<br><br>Still to come: All the
+                                    documents</p>
+
+                                <hr/>
+                                <div id="ComingSoonWeb"></div>
+                                <h5>
+                                    <a href="#ComingSoonWeb">
+                                        <span style="color: purple;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 4
+                                    </a>
+                                </h5>
+
+                                <p>Coming soon</p>
+
+                                <hr/>
+
+                                <div id="ComingSoonApp"></div>
+                                <h5>
+                                    <a href="#ComingSoonApp">
+                                        <span style="color: yellow;" class="glyphicon glyphicon-folder-open"></span>&nbsp;
+                                        Module 5
+                                    </a>
+                                </h5>
+                                <p>Coming soon</p>
+                                <hr/>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="thumbnail well">
+                    <h5><b>Quizes &amp; Assignments</b></h5>
+                    <hr/>
+
+                    <div style="position: relative">
+                        <a href="{{ url_for('assignments.create_assignment') }}" class="btn btn-primary"
+                           style="position: absolute;top: -60px;right: 0">Add</a>
+                    </div>
+                    <table id="content" class="table table-hover table-responsive">
+                        <tbody>
+                        {% for assignment in assignments %}
+                            <tr>
+                                <a href="{{ url_for('assignments.assignment_details',assignment_id=assignment.id) }}">
+                                    {#Show the description of the assignment#}
+                                    {{ assignment.title }}
+                                </a>
+                            </tr>
+                            <hr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="fileModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Files</h4>
+                </div>
+
+                <div class="modal-body"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function () {
+            vanillacalendar.init();
+        })
+    </script>
+
+    <style type="text/css">
+        .well {
+            background: white;
+        }
+
+        hr {
+            border-color: #c2c2a3;
+        }
+
+        body {
+            background-color: #dbd8d9;
+        }
+
+        p {
+            font-size: 10px;
+        }
+    </style>
+
+{% endblock %}
+

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <link rel="stylesheet" href="static/css/main.css"/>
+    <link rel="stylesheet" href="static/css/home.css"/>
+
+    <header id="header">
+        <div class="inner">
+            &nbsp;&nbsp;NewNotes</a>
+            <div class="showHide">
+                <a data-toggle="modal" data-target="#registerModal">Sign Up</a>
+                <a href="/signIn">Sign in</a>
+            </div>
+
+            <nav id="nav">
+                <div id="asize">
+                    <a href="/">Home</a>
+                    <a href="/about">About</a>
+                    <a data-toggle="modal" data-target="#registerModal">Sign Up</a>
+                    <a href="{{ url_for('login') }}">Sign in</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section style="background-image: url('/static/img/homePage/star.jpg'); margin-top:-15px;" id="banner">
+        <h1 style="background-color: rgba(0, 0, 0, 0.4);">Welcome to NewNotes</h1>
+        <p style="background-color: rgba(0, 0, 0, 0.4);">A place for tutors and students</p>
+    </section>
+
+    <section id="one" class="wrapper">
+        <div class="inner">
+            <div class="flex flex-3">
+
+
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="largeModal"
+         aria-hidden="true">
+        <div style="margin-top: 200px; width: 400px;" class="modal-dialog modal-sm">
+            <div style="height: 250px;" class="modal-content">
+                <div class="modal-header">
+                    <h4 style="text-align: center;" class="modal-title" id="myModalLabel">Who Are You?</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button style="background-color: white;" type="button"
+                                    onclick="window.location.href = '/teachers/create'">
+                                <span style="font-size: 102px; color: #ff3333"
+                                      class="glyphicon glyphicon-education"></span>
+                                <br>
+                                <h6>I am a teacher</h6>
+                            </button>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <button style="background-color: white;" type="button"
+                                    onclick="window.location.href = '/students/create'">
+                                <span style="font-size: 102px; color: #4dff4d;" class="glyphicon glyphicon-user"></span>
+                                <br>
+                                <h6>I am a student</h6>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var button = document.getElementById('btnShow');
+
+        btnShow.onclick = function () {
+            var x = document.getElementById('parentDiv');
+            if (x.style.display === "none") {
+                button.value = "See less";
+                x.style.display = "block";
+            } else {
+                button.value = "See more";
+                x.style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}

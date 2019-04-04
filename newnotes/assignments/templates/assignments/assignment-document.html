@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style type="text/css">
+        body {
+            background-color: #dbd8d9;
+        }
+    </style>
+    <!-- Display below navbar if logged in user is a student -->
+    <nav id="navbarColor" class="navbar navbar-inverse">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse-2"><span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a style="float: right;" class="navbar-brand" href="{{ url_for('students.profile') }}">
+                    NewNotes
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-2">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{ user.name }} {{ user.surname }} <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('profile_edit') }}"><i class="glyphicon glyphicon-cog"></i> Edit
+                                Profile</a></li>
+                            <li><a href="{{ url_for('logout') }}"><i class="glyphicon glyphicon-log-out"></i>Log out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a data-toggle="tooltip" title="Log out" href="{{ url_for('logout') }}"><i
+                            class="glyphicon glyphicon-log-out"></i></a></li>
+                </ul>
+
+                <div class="col-sm-3 col-md-3" style="float: right;">
+                    {% if user.approved %}
+                        <form class="navbar-form" role="form" method=POST action="{{ url_for('students.profile') }}">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" id="searchBar"
+                                       placeholder="Search Files">
+
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit"><i
+                                            class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End navbar -->
+
+    <div class="container">
+        {#Display the Assignment Details here#}
+        <div class="jumbotron">
+            <h3 class="text-center">Assignment Details</h3>
+            {# Assignment Title #}
+            <div class="row">
+                <div class="col-lg-3"><strong>Title</strong></div>
+                <div class="col-lg-6">{{ assignment.title }}</div>
+            </div>
+            <hr>
+            {# Assignment Description #}
+            <div class="row">
+                <div class="col-lg-3"><strong>Description</strong></div>
+                <div class="col-lg-6">{{ assignment.description | safe }}</div>
+            </div>
+            <hr>
+            {# Assignment Creator #}
+            <div class="row">
+                <div class="col-lg-3"><strong>Created By</strong></div>
+                <div class="col-lg-6">{{ assignment.created_by.name }}</div>
+            </div>
+            <hr>
+            {# Assignment Submission Date #}
+            <div class="row">
+                <div class="col-lg-3"><strong>Submission Date</strong></div>
+                <div class="col-lg-6">{{ assignment.submission_date.strftime('%Y-%m-%d') }} </div>
+            </div>
+            {# Assignment Status #}
+            <hr>
+            <div class="row">
+                <div class="col-lg-3"><strong>Status</strong></div>
+                <div class="col-lg-6">
+                    {% if assignment.status %}
+                        Open
+                    {% else %}
+                        Close
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if assignment.status %}
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Upload Files</strong></div>
+
+                <div class="panel-body">
+                    <h4>Select files from your computer</h4>
+
+                    <form action="{{ url_for('assignments.upload_document',assignment_id=assignment.id) }}"
+                          method="post"
+                          enctype="multipart/form-data">
+                        <!--CSRF TOKEN THIS IS FOR SECURITY-->
+                        {{ form.hidden_tag() }}
+                        {# If previously submitted document then display that file download link here#}
+                        {% if document is not none %}
+                            <div style="margin-bottom: 10px">
+                                <a href="{{ url_for('assignments.download',file_name=document.filename) }}">{{ document.filename }}</a>
+
+                            </div>
+                        {% endif %}
+                        {{ form.file }}<br>
+                        {# If previously updated document then change the label of submit button to edit upload #}
+                        {{ form.submit(class='btn btn-sm btn-primary') }}
+                    </form>
+                    <br>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
